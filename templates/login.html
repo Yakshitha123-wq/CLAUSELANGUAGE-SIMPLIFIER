@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - ClauseEase AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="login-body">
+
+    <div class="login-container">
+        <!-- Login Box -->
+        <div class="login-box">
+            <div class="brand-header">
+                <i class="fa-solid fa-scale-balanced logo-icon"></i>
+                <h1>ClauseEase AI</h1>
+                <p class="tagline">Simplify Complex Contracts with AI Power ⚖️</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, msg in messages %}
+                        <div class="flash {{ category }}">{{ msg }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" class="login-form">
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+
+            <p class="register-link">
+                Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== Features Section ===== -->
+    <div class="features-section">
+        <h2 class="feature-heading">Why Choose ClauseEase AI?</h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <i class="fa-solid fa-shield-halved feature-icon"></i>
+                <h3>Secure Authentication</h3>
+                <p>We ensure your data is fully encrypted and protected using advanced hashing algorithms.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-file-lines feature-icon"></i>
+                <h3>Document History</h3>
+                <p>Track every contract you analyze. Access and review your previous documents anytime.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-brain feature-icon"></i>
+                <h3>AI-Powered Simplification</h3>
+                <p>Our NLP model simplifies complex legal clauses into plain, understandable language.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-gauge-high feature-icon"></i>
+                <h3>High Performance</h3>
+                <p>Lightning-fast contract parsing and intelligent clause detection ensure zero delays.</p>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='mouse-glow.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - ClauseEase AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Password Strength Styles */
+        .strength {
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: left;
+        }
+        .weak { color: red; }
+        .fair { color: orange; }
+        .strong { color: limegreen; }
+        select {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #fff;
+            font-size: 16px;
+        }
+        select option {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="login-body">
+
+    <!-- ===== Registration Box ===== -->
+    <div class="login-container">
+        <div class="login-box">
+            <div class="brand-header">
+                <i class="fa-solid fa-scale-balanced logo-icon"></i>
+                <h1>ClauseEase AI</h1>
+                <p class="tagline">Join the Future of Contract Simplification ⚖️</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, msg in messages %}
+                        <div class="flash {{ category }}">{{ msg }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" class="login-form">
+                <!-- Username -->
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" name="username" placeholder="Choose a Username" required>
+                </div>
+
+                <!-- Email -->
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Enter your Email" required>
+                </div>
+
+                <!-- Age -->
+                <div class="input-group">
+                    <i class="fa-solid fa-calendar"></i>
+                    <input type="number" name="age" placeholder="Age" min="10" max="120" required>
+                </div>
+
+                <!-- Gender -->
+                <div class="input-group">
+                    <i class="fa-solid fa-venus-mars"></i>
+                    <select name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Country -->
+                <div class="input-group">
+                    <i class="fa-solid fa-earth-asia"></i>
+                    <input type="text" name="country" placeholder="Country" required>
+                </div>
+
+                <!-- State -->
+                <div class="input-group">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <input type="text" name="state" placeholder="State" required>
+                </div>
+
+                <!-- Password -->
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" id="password" placeholder="Create a Password" required>
+                </div>
+
+                <p id="password-strength" class="strength"></p>
+
+                <button type="submit" class="login-btn">Register</button>
+            </form>
+
+            <p class="register-link">
+                Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== Feature Section ===== -->
+    <div class="features-section">
+        <h2 class="feature-heading">Why Join ClauseEase AI?</h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <i class="fa-solid fa-user-shield feature-icon"></i>
+                <h3>Secure User Accounts</h3>
+                <p>Your personal data and uploaded contracts are protected with industry-grade encryption.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-book feature-icon"></i>
+                <h3>Personalized Document Library</h3>
+                <p>Save and manage all your simplified contracts in your personal dashboard effortlessly.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-robot feature-icon"></i>
+                <h3>AI That Learns With You</h3>
+                <p>Our adaptive AI improves over time, offering smarter simplifications based on your usage.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-clock feature-icon"></i>
+                <h3>Quick Setup</h3>
+                <p>Register in seconds and start simplifying contracts right away — no complex steps required.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password strength indicator
+        const password = document.getElementById("password");
+        const strengthText = document.getElementById("password-strength");
+
+        password.addEventListener("input", () => {
+            const val = password.value;
+            let strength = "Weak";
+            let cls = "weak";
+
+            if (val.length >= 8 && /[A-Z]/.test(val) && /\d/.test(val) && /[!@#$%^&*]/.test(val)) {
+                strength = "Strong";
+                cls = "strong";
+            } else if (val.length >= 8 && (/[A-Z]/.test(val) || /\d/.test(val))) {
+                strength = "Fair";
+                cls = "fair";
+            }
+
+            strengthText.textContent = `Password Strength: ${strength}`;
+            strengthText.className = `strength ${cls}`;
+        });
+
+        // Mouse glow effect
+        const body = document.querySelector('.login-body');
+        body.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            body.style.background = `
+                radial-gradient(600px circle at ${x}px ${y}px, 
+                    rgba(178, 102, 255, 0.15), 
+                    transparent 40%),
+                #ffffff
+            `;
+        });
+        body.addEventListener('mouseleave', () => {
+            body.style.background = '#ffffff';
+        });
+    </script>
+</body>
+</html>

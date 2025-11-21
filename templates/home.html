@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ClauseEase AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="home-container">
+    <div class="hero-section">
+        <h1>Welcome to <span>ClauseEase AI</span></h1>
+        <p>Simplify, Understand, and Manage Complex Contracts with the Power of AI ⚖️</p>
+
+        {% if user %}
+            <a href="{{ url_for('simplify') }}" class="cta-btn">Start Simplifying</a>
+        {% else %}
+            <a href="{{ url_for('register') }}" class="cta-btn">Get Started</a>
+        {% endif %}
+    </div>
+
+    <div class="features-grid">
+        <div class="feature">
+            <i class="fa-solid fa-brain"></i>
+            <h3>AI-Powered Simplification</h3>
+            <p>Our advanced model breaks down dense legal jargon into easy-to-understand language.</p>
+        </div>
+        <div class="feature">
+            <i class="fa-solid fa-user-shield"></i>
+            <h3>Secure & Private</h3>
+            <p>Your documents remain confidential with strong encryption and private user storage.</p>
+        </div>
+        <div class="feature">
+            <i class="fa-solid fa-gavel"></i>
+            <h3>Lawyer-Friendly Insights</h3>
+            <p>Generate concise summaries, identify clauses, and analyze risks — all in one click.</p>
+        </div>
+        <div class="feature">
+            <i class="fa-solid fa-clock"></i>
+            <h3>Time Saver</h3>
+            <p>Reduce hours of manual reading into seconds of AI-driven simplification.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+:root {
+    --light-lavender: #E6E6FA;
+    --medium-lavender: #B39EB5;
+    --dark-lavender: #6A5ACD;
+    --white: #FFFFFF;
+    --text-dark: #2E2E2E;
+    --text-light: #555555;
+}
+
+.home-container {
+    color: var(--text-dark);
+    text-align: center;
+    padding: 100px 40px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.hero-section {
+    margin-bottom: 80px;
+}
+
+.hero-section h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.hero-section h1 span {
+    color: var(--dark-lavender);
+    background: linear-gradient(135deg, var(--dark-lavender), var(--medium-lavender));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-section p {
+    font-size: 18px;
+    margin: 20px auto;
+    max-width: 700px;
+    color: var(--text-light);
+    line-height: 1.8;
+}
+
+.cta-btn {
+    background: transparent;
+    border: 2px solid var(--dark-lavender);
+    color: var(--dark-lavender);
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.cta-btn:hover {
+    background: linear-gradient(90deg, var(--dark-lavender), var(--medium-lavender));
+    border-color: transparent;
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(106, 90, 205, 0.3);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.feature {
+    background: var(--white);
+    border: 2px solid var(--dark-lavender);
+    border-radius: 16px;
+    padding: 30px 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(106, 90, 205, 0.15);
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    border-color: var(--medium-lavender);
+    box-shadow: 0 10px 30px rgba(106, 90, 205, 0.25);
+}
+
+.feature i {
+    font-size: 32px;
+    color: var(--dark-lavender);
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+}
+
+.feature:hover i {
+    color: var(--medium-lavender);
+}
+
+.feature h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--dark-lavender);
+    margin-bottom: 12px;
+}
+
+.feature p {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .home-container {
+        padding: 60px 20px;
+    }
+
+    .hero-section h1 {
+        font-size: 36px;
+    }
+
+    .hero-section p {
+        font-size: 16px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section h1 {
+        font-size: 28px;
+    }
+
+    .hero-section p {
+        font-size: 15px;
+    }
+
+    .cta-btn {
+        padding: 10px 24px;
+        font-size: 15px;
+    }
+}
+</style>
+<script src="{{ url_for('static', filename='mouse-glow.js') }}"></script>
+</body>
+</html>

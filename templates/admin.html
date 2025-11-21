@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-container">
+    <h2>Admin Dashboard</h2>
+
+    <!-- Quick Stats -->
+    <div class="admin-stats">
+        <div class="stats-card">
+            <h3>Total Users</h3>
+            <p>{{ total_users }}</p>
+        </div>
+        <div class="stats-card">
+            <h3>Total Uploads</h3>
+            <p>{{ total_uploads }}</p>
+        </div>
+    </div>
+
+    <!-- Analytics Dashboard -->
+    <div class="admin-section">
+        <h3>Analytics Overview</h3>
+        <div class="chart-grid">
+            <div class="chart-box">
+                <h4>Uploads Per Day</h4>
+                <canvas id="uploadsChart" height="200"></canvas>
+            </div>
+            <div class="chart-box">
+                <h4>Upload Distribution by Simplification Level</h4>
+                <canvas id="levelChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Tools -->
+    <div class="admin-section admin-tools">
+        <h3>Admin Tools</h3>
+        <a href="{{ url_for('admin_glossary') }}">📚 Manage Glossary</a>
+    </div>
+
+    <!-- Recent Uploads -->
+    <div class="admin-section">
+        <h3>Recent Uploads</h3>
+        {% if uploads %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Filename</th>
+                    <th>User</th>
+                    <th>Level</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in uploads %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.filename }}</td>
+                    <td>{{ u.user.username }}</td>
+                    <td>{{ u.level }}</td>
+                    <td>{{ u.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No uploads yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Registered Users -->
+    <div class="admin-section">
+        <h3>Registered Users</h3>
+        {% if users %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Country</th>
+                    <th>Admin?</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.country }}</td>
+                    <td style="text-align:center;">{% if u.is_admin %}✅{% else %}❌{% endif %}</td>
+                    <td style="text-align:center;">
+                        <!-- Toggle admin -->
+                        <form method="post" action="{{ url_for('admin_toggle', user_id=u.id) }}" style="display:inline;">
+                            <button type="submit"
+                                    class="admin-btn-yellow"
+                                    onclick="return confirm('Are you sure you want to change admin status for {{ u.username }}?');">
+                                {% if u.is_admin %}Remove Admin{% else %}Make Admin{% endif %}
+                            </button>
+                        </form>
+
+                        <!-- Delete user -->
+                        <form method="post" action="{{ url_for('admin_delete_user', user_id=u.id) }}" style="display:inline;">
+                            <button type="submit"
+                                    class="admin-btn-red"
+                                    onclick="return confirm('Are you sure you want to DELETE user {{ u.username }}? This cannot be undone.');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No users found.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // --- Uploads Per Day Chart ---
+    const uploadsCtx = document.getElementById('uploadsChart').getContext('2d');
+    new Chart(uploadsCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ dates | tojson }},
+            datasets: [{
+                label: 'Uploads',
+                data: {{ upload_counts | tojson }},
+                backgroundColor: '#6A5ACD'
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } },
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // --- Simplification Level Chart ---
+    const levelCtx = document.getElementById('levelChart').getContext('2d');
+    new Chart(levelCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ levels | tojson }},
+            datasets: [{
+                data: {{ level_counts | tojson }},
+                backgroundColor: ['#6A5ACD', '#B39EB5', '#E6E6FA']
+            }]
+        },
+        options: {
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+</script>
+{% endblock %}

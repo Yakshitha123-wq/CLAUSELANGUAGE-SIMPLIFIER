@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Advanced Loading Screen -->
+<div id="loading-overlay" class="fade-out-hidden">
+    <div class="loader-box">
+        <div class="spinner"></div>
+
+        <div id="loading-steps">
+            <p id="step-text">Initializing...</p>
+            <div id="progress-track">
+                <div id="progress-bar"></div>
+            </div>
+            <p id="percent-text">0%</p>
+        </div>
+    </div>
+</div>
+
+<div class="simplify-container">
+    <h1>Contract Simplifier</h1>
+
+    <form id="simplify-form" method="POST" enctype="multipart/form-data">
+        <label>Upload Contract (PDF, DOCX, TXT):</label><br>
+        <input type="file" name="contract_file" accept=".pdf,.docx,.txt"><br><br>
+
+        <label>Or Paste Contract Text:</label><br>
+        <textarea name="contract_text" rows="10" placeholder="Paste contract text here..."></textarea><br>
+
+        <label>Simplification Level:</label><br>
+        <select name="simpl_level">
+            <option value="Basic" {% if results.simpl_level == 'Basic' %}selected{% endif %}>Basic</option>
+            <option value="Intermediate" {% if results.simpl_level == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+            <option value="Advanced" {% if results.simpl_level == 'Advanced' %}selected{% endif %}>Advanced</option>
+        </select><br><br>
+
+        <button type="submit">Analyze Contract</button>
+    </form>
+
+    {% if results %}
+    <hr>
+
+    <div class="results-columns">
+
+        <!-- LEFT COLUMN → Simplified Text (LARGE AREA) -->
+        <div class="column wide-column">
+            <h2>Simplified Text ({{ results.simpl_level }})</h2>
+            <textarea rows="25" readonly>{{ results.simplified_text }}</textarea>
+
+            <!-- Detected Clauses Section -->
+            <h2>Detected Clauses</h2>
+            {% if results.clauses %}
+                <ul class="clause-list">
+                    {% for c in results.clauses %}
+                        <li>
+                            <b>{{ c.type }}</b> — {{ c.text }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No specific clauses detected.</p>
+            {% endif %}
+        </div>
+
+                    <!-- RIGHT COLUMN → Detected Legal Terms ONLY -->
+            <div class="column small-column">
+
+                <h2>Detected Legal Terms</h2>
+
+                <!-- Scrollable box for terms -->
+                <div class="terms-box">
+                    {% if results.found_terms %}
+                        <ul>
+                        {% for term, meaning in results.found_terms.items() %}
+                            <li><b>{{ term.title() }}</b> — {{ meaning }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No legal terms detected.</p>
+                    {% endif %}
+                </div>
+
+                <h2>Original Text (Highlighted)</h2>
+                <div class="highlighted-text">
+                    {{ results.highlighted_text | safe }}
+                </div>
+
+            </div>
+
+    </div>
+    {% endif %}
+</div>
+
+<script>
+document.getElementById("simplify-form").addEventListener("submit", function () {
+    
+    let overlay = document.getElementById("loading-overlay");
+    overlay.style.display = "flex";
+
+    let progress = 0;
+    let bar = document.getElementById("progress-bar");
+    let percent = document.getElementById("percent-text");
+    let stepText = document.getElementById("step-text");
+
+    const steps = [
+        "Extracting text...",
+        "Cleaning content...",
+        "Detecting legal terms...",
+        "Running NLP models...",
+        "Simplifying writing...",
+        "Finalizing output..."
+    ];
+
+    let stepIndex = 0;
+
+    let stepInterval = setInterval(() => {
+        if (stepIndex < steps.length) {
+            stepText.innerText = steps[stepIndex];
+            stepIndex++;
+        }
+    }, 1200);
+
+    let fakeProgress = setInterval(() => {
+        if (progress >= 100) {
+            clearInterval(fakeProgress);
+            clearInterval(stepInterval);
+
+            // Fade-out animation when done
+            overlay.classList.add("fade-out");
+            setTimeout(() => overlay.style.display = "none", 500);
+
+        } else {
+            // Smooth increment
+            progress += Math.random() * 10;
+            if (progress > 98) progress = 98;
+        }
+
+        bar.style.width = progress + "%";
+        percent.innerText = Math.floor(progress) + "%";
+
+    }, 250);
+});
+</script>
+
+
+
+{% endblock %}

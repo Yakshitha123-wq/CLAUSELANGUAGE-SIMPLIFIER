@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+        <h1><i class="fa-solid fa-user-circle"></i> Profile Overview</h1>
+
+        <div class="profile-info">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Age:</strong> {{ user.age }}</p>
+            <p><strong>Gender:</strong> {{ user.gender }}</p>
+            <p><strong>Country:</strong> {{ user.country }}</p>
+            <p><strong>State:</strong> {{ user.state }}</p>
+        </div>
+
+        <hr>
+
+        <h2><i class="fa-solid fa-lock"></i> Change Password</h2>
+        <form method="POST" action="{{ url_for('change_password') }}" class="password-form">
+            <div class="input-group">
+                <i class="fa-solid fa-key"></i>
+                <input type="password" name="current_password" placeholder="Current Password" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock-open"></i>
+                <input type="password" name="new_password" id="new_password" placeholder="New Password" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm New Password" required>
+            </div>
+
+            <button type="submit" class="update-btn">Update Password</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="flash {{ category }}">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+</div>
+
+<style>
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid #b266ff;
+    border-radius: 20px;
+    padding: 40px;
+    width: 600px;
+    text-align: left;
+    color: #fff;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 25px rgba(178, 102, 255, 0.3);
+    transition: 0.4s ease;
+}
+
+.profile-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 35px rgba(178, 102, 255, 0.6);
+}
+
+.profile-card h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #b266ff;
+}
+
+.profile-info p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.password-form {
+    margin-top: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: border 0.3s ease, background 0.3s ease;
+}
+
+.input-group:hover {
+    border: 1px solid #b266ff;
+    background: rgba(178, 102, 255, 0.15);
+}
+
+.input-group i {
+    color: #b266ff;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.input-group input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+}
+
+.update-btn {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #b266ff;
+    border-radius: 10px;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.update-btn:hover {
+    background: linear-gradient(90deg, #6a00ff, #b266ff);
+    border-color: transparent;
+}
+
+.flash {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.flash.success { background: rgba(0, 255, 127, 0.15); border-left: 4px solid #00ff88; }
+.flash.danger { background: rgba(255, 0, 0, 0.15); border-left: 4px solid #ff4d4d; }
+.flash.warning { background: rgba(255, 165, 0, 0.15); border-left: 4px solid #ffcc00; }
+</style>
+{% endblock %}

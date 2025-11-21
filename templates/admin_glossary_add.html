@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-container">
+    <h2>Add New Glossary Term</h2>
+
+    <form method="post" class="admin-form">
+        <label>Term:</label>
+        <input type="text" name="term" required>
+
+        <label>Meaning:</label>
+        <textarea name="meaning" rows="4" required></textarea>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Term</button>
+            <a href="{{ url_for('admin_glossary') }}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-container">
+    <h2>Manage Glossary</h2>
+
+    <a href="{{ url_for('add_glossary_term') }}" class="btn-primary">Add New Term</a>
+
+    {% if terms %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Term</th>
+                <th>Meaning</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in terms %}
+            <tr>
+                <td>{{ t.id }}</td>
+                <td>{{ t.term }}</td>
+                <td>{{ t.meaning }}</td>
+                <td>
+                    <a href="{{ url_for('edit_glossary_term', term_id=t.id) }}" class="admin-btn-yellow">Edit</a>
+                    <form action="{{ url_for('delete_glossary_term', term_id=t.id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="admin-btn-red" onclick="return confirm('Delete {{ t.term }}?');">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="no-data">No glossary terms added yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  flask_app:
+    build: .
+    container_name: clauseease_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./instance:/app/instance
+    restart: unless-stopped
